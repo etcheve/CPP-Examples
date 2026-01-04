@@ -1,0 +1,1 @@
+Lets you provide a substitute or placeholder for another object

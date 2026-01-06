@@ -1,0 +1,1 @@
+turns a set of behaviors into objects and makes them interchangeable inside original context object.

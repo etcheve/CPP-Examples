@@ -12,18 +12,18 @@ class VisitAndPrint : public Visitor{
 public:
 
 
-virtual void visit(class A &a){
-  std::cout << "A" << std::endl;
-}
-virtual void visit(class B &b){
-  std::cout << "B" << std::endl;
-}
-virtual void visit(class C &c){
-  std::cout << "C" << std::endl;
-}
-virtual void visit(class D &d){
-  std::cout << "D" << std::endl;
-}
+  virtual void visit(class A &a){
+    std::cout << "A" << std::endl;
+  }
+  virtual void visit(class B &b){
+    std::cout << "B" << std::endl;
+  }
+  virtual void visit(class C &c){
+    std::cout << "C" << std::endl;
+  }
+  virtual void visit(class D &d){
+    std::cout << "D" << std::endl;
+  }
 
 };
 class toBeVisited{

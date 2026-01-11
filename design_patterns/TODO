@@ -1,0 +1,33 @@
+CRTP (Curiously Recurring Template Pattern)
+RAII guards
+Non-virtual interface
+Monostate
+
+
+
+
+Thread pool
+Work stealing
+Actor model
+Reactor / Proactor
+Read-copy-update (RCU)
+Hazard pointers
+Double buffering
+Ring buffer (lock-free)
+Backpressure
+Futures/Promises pipelines
+
+
+BFS
+DFS
+Dijkstra
+
+
+Binary heap
+Trie
+LRU cache
+Segment tree
+Fenwick tree
+AVL / Red-Black Tree
+B-Tree
+Skip list

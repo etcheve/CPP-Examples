@@ -1,5 +1,5 @@
 #pragma once
-#include <iostream>
+
 class Chair {
 public:
     virtual ~Chair() = default;
@@ -14,33 +14,20 @@ public:
 
 class VictorianChair : public Chair {
 public:
-    void method() override {
-        // Implementation for Victorian Chair
-        std::cout << "Victorian Chair method called." << std::endl;
-    }
+    void method() override;
 };
- 
 
 class VictorianSofa : public Sofa {
 public:
-    void method() override {
-        // Implementation for Victorian Sofa
-        std::cout << "Victorian Sofa method called." << std::endl;
-    }
+    void method() override;
 };
 
 class ModernChair : public Chair {
 public:
-    void method() override {
-        // Implementation for Modern Chair
-        std::cout << "Modern Chair method called." << std::endl;
-    }
+    void method() override;
 };
 
-class ModernSofa : public Sofa {         
+class ModernSofa : public Sofa {
 public:
-    void method() override {
-        // Implementation for Modern Sofa
-        std::cout << "Modern Sofa method called." << std::endl;
-    }
+    void method() override;
 };

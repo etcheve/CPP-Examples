@@ -1,10 +1,62 @@
- lets you construct complex objects step by step. 
+# Builder
 
-  is a well-known pattern in C++ world. It’s especially useful when you need to create an object with lots of possible configuration options.
+## Intent
 
-a single creation method and several methods to configure the resulting object. 
+Separate the construction of a complex object from its representation, allowing the same construction process to produce different configurations.
 
-Having a director class in your program isn’t strictly necessary. You can always call the building steps in a specific order directly from the client code. However, the director class might be a good place to put various construction routines so you can reuse them across your program.
+## When to use
 
+- An object requires many optional parameters or configuration steps.
+- You want to avoid telescoping constructors.
+- Construction should be done step by step, with only a final `build()` call producing the object.
 
-g++ -std=c++20 -Wall -Wextra -Wpedantic product.cpp main.cpp -o test_builder
+## Key points
+
+- `Product` has a **private default constructor** — it can only be created through its inner `Builder`.
+- The `Builder` stores a `Product` internally and fills its fields via fluent setter methods.
+- Each setter returns `*this` (a `Builder&`) enabling **method chaining**.
+- `build()` moves the fully configured `Product` out of the builder.
+
+## Structure
+
+```mermaid
+classDiagram
+    class Product {
+        -host_ : string
+        -port_ : int
+        -tls_ : bool
+        -timeoutMs_ : int
+        -retries_ : int
+        -Product()
+        +print() void
+    }
+    class Builder {
+        -product_ : Product
+        +host(h : string) Builder&
+        +port(p : int) Builder&
+        +tls(t : bool) Builder&
+        +timeoutMs(ms : int) Builder&
+        +retries(n : int) Builder&
+        +build() Product
+    }
+    Product +-- Builder : inner class
+    Builder ..> Product : builds
+```
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `product.hpp` | `Product` class declaration with inner `Builder` forward declaration |
+| `product.cpp` | `Product::print()` implementation |
+| `builder.hpp` | `Product::Builder` class declaration |
+| `builder.cpp` | Builder method implementations |
+| `main.cpp` | Demo: fluent builder call to configure an HTTP client |
+
+## Build & run
+
+```bash
+make        # build
+make run    # build and run
+make clean  # remove binary
+```

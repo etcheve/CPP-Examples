@@ -1,11 +1,11 @@
 #include "prototype.hpp"
 
-int main (){
-    shaps* circle1 = new Circle();
-    shaps* circle2 = circle1->clone();
+int main() {
+    Shape* circle1 = new Circle();
+    Shape* circle2 = circle1->clone();
 
-    shaps* square1 = new Square();
-    shaps* square2 = square1->clone();
+    Shape* square1 = new Square();
+    Shape* square2 = square1->clone();
 
     circle1->draw();
     circle2->draw();

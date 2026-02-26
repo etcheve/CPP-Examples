@@ -1,32 +1,20 @@
 #pragma once
-#include <iostream>
 
-class shaps{
+class Shape {
 public:
-    virtual ~shaps() {}
+    virtual ~Shape() {}
     virtual void draw() = 0;
-    virtual shaps* clone() const = 0;
+    virtual Shape* clone() const = 0;
 };
 
-class Circle : public shaps {
+class Circle : public Shape {
 public:
-    Circle* clone() const override {
-        return new Circle(*this);
-    }
-    void draw() override {
-        // Drawing logic for Circle
-        std::cout << "Drawing Circle\n";
-    }   
-};  
+    Circle* clone() const override;
+    void draw() override;
+};
 
-class Square : public shaps {
+class Square : public Shape {
 public:
-    Square* clone() const override {
-        return new Square(*this);
-    }
-
-    void draw() override {
-        // Drawing logic for Square
-        std::cout << "Drawing Square\n";
-    }
-};  
+    Square* clone() const override;
+    void draw() override;
+};

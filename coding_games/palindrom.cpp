@@ -2,7 +2,8 @@
 
 //Given a string s, return the longest palindromic substring in s.
 
-
+#include <string>
+using namespace std;
 class Solution {
 public:
     string longestPalindrome(string s) {

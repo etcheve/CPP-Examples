@@ -6,7 +6,7 @@ struct FileSystemObject {
     virtual ~FileSystemObject() = default;
 
     virtual void Add(std::unique_ptr<FileSystemObject> obj) = 0;
-    virtual void Remove() = 0;
+    virtual void Clear() = 0;
     virtual void Delete(FileSystemObject* obj) = 0;
     virtual void DisplayAll() const = 0;
     virtual bool operator==(const FileSystemObject &other) const {
@@ -22,16 +22,15 @@ public:
         : name_(std::move(name)) {}
 
     void Add(std::unique_ptr<FileSystemObject>) override {
-        // A file cannot contain children — no-op or throw
-        throw std::logic_error("Cannot add to file");
+        throw std::logic_error("Cannot add to a file");
     }
 
     void Delete(FileSystemObject* /*obj*/) override {
         std::cout << "Deleting file: " << name_ << '\n';
     }
 
-    void Remove() override {
-        std::cout << "Removing file: " << name_ << '\n';
+    void Clear() override {
+        // Files have no children — no-op
     }
 
     void DisplayAll() const override {
@@ -59,7 +58,7 @@ public:
         });
     }
 
-    void Remove() override {
+    void Clear() override {
         children_.clear();
     }
 

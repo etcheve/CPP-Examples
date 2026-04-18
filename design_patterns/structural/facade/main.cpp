@@ -1,63 +1,52 @@
 #include <iostream>
+#include <memory>
 
-class Engine{
-    public: 
-      virtual void start(){
-        std::cout << "Engine started" << std::endl;
-      }
-      virtual void stop(){
-        std::cout << "Engine stopped" << std::endl;
-      }
+class Engine {
+public:
+    void start() { std::cout << "Engine started\n"; }
+    void stop()  { std::cout << "Engine stopped\n"; }
 };
 
-class Lights{
-    public:
-      virtual void turnOn(){
-        std::cout << "Lights turned on" << std::endl;
-      }
-      virtual void turnOff(){
-        std::cout << "Lights turned off" << std::endl;
-      }
+class Lights {
+public:
+    void turnOn()  { std::cout << "Lights turned on\n"; }
+    void turnOff() { std::cout << "Lights turned off\n"; }
 };
 
-class Aircon{
-    public:
-      virtual void turnOn(){    
-        std::cout << "Aircon turned on" << std::endl;
-      }
-
-    virtual void turnOff(){
-        std::cout << "Aircon turned off" << std::endl;
-    }
-
+class Aircon {
+public:
+    void turnOn()  { std::cout << "Aircon turned on\n"; }
+    void turnOff() { std::cout << "Aircon turned off\n"; }
 };
 
-class CarFacade{
-    private:
-      Engine *engine_;
-      Lights *lights_;
-      Aircon *aircon_;
-    public:
-      CarFacade(Engine* engine = nullptr, Lights* lights = nullptr, Aircon* aircon = nullptr){
-        engine_ = engine ? engine : new Engine();
-        lights_ = lights ? lights : new Lights();
-        aircon_ = aircon ? aircon : new Aircon();
-      }
-      void startCar(){
+class CarFacade {
+public:
+    CarFacade()
+        : engine_(std::make_unique<Engine>()),
+          lights_(std::make_unique<Lights>()),
+          aircon_(std::make_unique<Aircon>()) {}
+
+    void startCar() {
         engine_->start();
         lights_->turnOn();
         aircon_->turnOn();
-        std::cout << "Car started" << std::endl;
-      }
-      void stopCar(){
+        std::cout << "Car ready\n";
+    }
+
+    void stopCar() {
         aircon_->turnOff();
         lights_->turnOff();
         engine_->stop();
-        std::cout << "Car stopped" << std::endl;
-      }
+        std::cout << "Car stopped\n";
+    }
+
+private:
+    std::unique_ptr<Engine> engine_;
+    std::unique_ptr<Lights> lights_;
+    std::unique_ptr<Aircon> aircon_;
 };
 
-int main(){
+int main() {
     CarFacade car;
     car.startCar();
     car.stopCar();

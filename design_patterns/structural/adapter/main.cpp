@@ -1,16 +1,11 @@
 #include "adapter.hpp"
 #include <iostream>
+#include <memory>
 
 int main() {
-    LegacyMarketData* legacyMarketData = new LegacyMarketData();
-    TargetMarketData* adapter = new AdapterMarketData(legacyMarketData);
-    double aaplPrice = adapter->fetchPrice("AAPL");
-    double googlPrice = adapter->fetchPrice("GOOGL");
-    std::cout << "AAPL Price: " << aaplPrice << "\n";
-    std::cout << "GOOGL Price: " << googlPrice << "\n";
+    auto legacyMarketData = std::make_unique<LegacyMarketData>();
+    std::unique_ptr<TargetMarketData> adapter = std::make_unique<AdapterMarketData>(legacyMarketData.get());
 
-    delete adapter;
-    delete legacyMarketData;
-
-    return 0;
-};
+    std::cout << "AAPL Price: " << adapter->fetchPrice("AAPL") << "\n";
+    std::cout << "GOOGL Price: " << adapter->fetchPrice("GOOGL") << "\n";
+}

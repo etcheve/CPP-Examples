@@ -1,124 +1,88 @@
-#include<iostream>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
+struct SharedState {
+    std::string model;
+    std::string color;
+    std::string company;
 
-struct SharedState{
-        SharedState(std::string model = "" , std::string color = "" , std::string company = "")
-            : model_(model), color_(color), company_(company) {}
+    std::string key() const { return model + "_" + color + "_" + company; }
 
-
-        friend std::ostream& operator<<(std::ostream &os, const SharedState& s){
-            os << "[Model: " << s.model_ << ", Color: " << s.color_ << ", Company: " << s.company_ << "]";
-            return os;  
-        }    
-        std::string getKey() const{
-            return model_ + "_" + color_ + "_" + company_;  
-        }
-
-        std::string model_;
-        std::string color_;
-        std::string company_;
-
+    friend std::ostream& operator<<(std::ostream& os, const SharedState& s) {
+        return os << "[Model: " << s.model << ", Color: " << s.color
+                  << ", Company: " << s.company << "]";
+    }
 };
 
+struct UniqueState {
+    std::string owner;
+    std::string licensePlate;
 
-struct UniqueState{
-    public:
-        UniqueState(std::string owner = "", std::string licensePlate = "")
-            : owner_(owner), licensePlate_(licensePlate) {}
-
-        friend std::ostream& operator<<(std::ostream &os, const UniqueState& u){
-            os << "[Owner: " << u.owner_ << ", License Plate: " << u.licensePlate_ << "]";
-            return os;  
-        }    
-
-    private:
-        std::string owner_;
-        std::string licensePlate_;
+    friend std::ostream& operator<<(std::ostream& os, const UniqueState& u) {
+        return os << "[Owner: " << u.owner << ", Plate: " << u.licensePlate << "]";
+    }
 };
 
+class Flyweight {
+public:
+    explicit Flyweight(SharedState shared) : shared_(std::move(shared)) {}
 
-class Flyweight{
-    public: 
-    virtual ~Flyweight() {
-        delete shared_state_;
+    void operation(const UniqueState& unique) const {
+        std::cout << "Flyweight: shared=" << shared_ << " unique=" << unique << '\n';
     }
 
-    Flyweight(const SharedState *shared_state) : shared_state_(new SharedState(*shared_state)){}
-    Flyweight(const Flyweight &other) : shared_state_(new SharedState(*other.shared_state_)){}
+private:
+    SharedState shared_;
+};
 
-    SharedState *shared_state() const{
-        return shared_state_;
+class FlyweightFactory {
+public:
+    explicit FlyweightFactory(std::initializer_list<SharedState> states) {
+        for (const auto& s : states)
+            pool_.emplace(s.key(), Flyweight(s));
     }
-    void Operation(const UniqueState &unique_state) const
-    {
-        std::cout << "Flyweight: Displaying shared (" << *shared_state_ << ") and unique (" << unique_state << ") state.\n";
-    } 
-    private: 
-        SharedState *shared_state_;
 
+    const Flyweight& get(const SharedState& s) {
+        auto key = s.key();
+        auto it = pool_.find(key);
+        if (it == pool_.end()) {
+            std::cout << "FlyweightFactory: creating new flyweight\n";
+            it = pool_.emplace(key, Flyweight(s)).first;
+        } else {
+            std::cout << "FlyweightFactory: reusing existing flyweight\n";
+        }
+        return it->second;
+    }
+
+    void list() const {
+        std::cout << "\nFlyweightFactory: " << pool_.size() << " flyweights cached:\n";
+        for (const auto& entry : pool_)
+            std::cout << "  " << entry.first << '\n';
+    }
+
+private:
+    std::unordered_map<std::string, Flyweight> pool_;
 };
 
-class FlyweightFactory{
-    public:
-
-        FlyweightFactory(std::initializer_list<SharedState> share_states){
-            for (const SharedState &ss : share_states){
-                flyweights_.insert(std::make_pair(GetKey(ss), Flyweight(&ss)));
-            }
-        }
-
-        Flyweight getFlyweight(const SharedState &shared_state){
-            auto key = GetKey(shared_state);
-            
-            if (flyweights_.find(key) == flyweights_.end()){
-                std::cout << "FlyweightFactory: Can't find a flyweight, creating new one.\n";
-                flyweights_.insert(std::make_pair(key, Flyweight(&shared_state)));
-            } else {
-                std::cout << "FlyweightFactory: Reusing existing flyweight.\n";
-            }
-            return flyweights_.at(key);
-        }
-
-        void ListFlyweights() const{
-          size_t count = this->flyweights_.size();
-          std::cout << "\nFlyweightFactory: I have " << count << " flyweights:\n";
-          for (std::pair<std::string, Flyweight> pair : flyweights_){
-            std::cout << pair.first << "\n";
-          }
-        }
-    private:
-        std::unordered_map<std::string, Flyweight> flyweights_;
-        std::string GetKey(const SharedState &ss) const {
-            return ss.getKey();
-        }
-};
-
-void addToDB(FlyweightFactory &ff, const std::string &owner, const std::string &licensePlate,
-             const std::string &model, const std::string &color, const std::string &company){
-    std::cout << "\nClient: Adding a car to database.\n";
-    const Flyweight &flyweight = ff.getFlyweight(SharedState(model, color, company));
-    // Client code either stores or uses the flyweight's instance
-    flyweight.Operation(UniqueState(owner, licensePlate));  
-
+static void addToDB(FlyweightFactory& ff, const std::string& owner,
+                    const std::string& plate, SharedState shared) {
+    std::cout << "\nClient: adding car to database\n";
+    ff.get(shared).operation({owner, plate});
 }
 
-int main(){
-    FlyweightFactory *ff = new FlyweightFactory({
-        {"BMW", "red", "M3"},
-        {"Audi", "white", "A6"},
-        {"Ford", "black", "Mustang"},
+int main() {
+    FlyweightFactory ff({
+        {"M3",      "red",   "BMW"},
+        {"A6",      "white", "Audi"},
+        {"Mustang", "black", "Ford"},
     });
 
-    ff->ListFlyweights();
+    ff.list();
 
-    addToDB(*ff, "John Doe", "CL234IR", "BMW", "red", "M3");
-    addToDB(*ff, "James Doe", "CL234IR", "BMW", "red", "X1");
-    addToDB(*ff, "Jake Doe", "CL234IR", "BMW", "black", "X3");
+    addToDB(ff, "John Doe",  "CL234IR", {"M3",  "red",   "BMW"});
+    addToDB(ff, "James Doe", "CL234IR", {"X1",  "red",   "BMW"});
+    addToDB(ff, "Jake Doe",  "CL234IR", {"X3",  "black", "BMW"});
 
-    ff->ListFlyweights();
-
-    delete ff;
-    return 0;
+    ff.list();
 }

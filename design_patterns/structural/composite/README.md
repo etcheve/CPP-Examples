@@ -1,6 +1,25 @@
-Compose objects into tree structures and then work with these structures as if they were individual objects.
-Basically a composite containes composites and objects 
+# Composite
 
-Pay attention when storing the objects, cause if a copy is created you lose the information 
+Composes objects into tree structures to represent part-whole hierarchies.
+Clients can treat individual objects (leaves) and compositions (nodes) uniformly through a common interface.
 
-g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp
+## Participants
+- **Component** (`FileSystemObject`) — common interface for leaves and composites
+- **Leaf** (`File`) — has no children; implements operations directly
+- **Composite** (`Directory`) — stores children and delegates operations to them
+
+## Key operations
+| Method | Leaf | Composite |
+|---|---|---|
+| `Add` | throws | appends child |
+| `Delete(obj*)` | prints deletion | removes matching child |
+| `Clear()` | no-op | removes all children |
+| `DisplayAll()` | prints self | prints self + recurses |
+
+## Watch out
+Ownership matters: moving a `unique_ptr` into `Add()` transfers it — keep no reference to it after that point.
+
+## Build
+```
+g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp -o composite
+```

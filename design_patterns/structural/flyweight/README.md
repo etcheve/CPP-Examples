@@ -1,4 +1,19 @@
-lets you fit more objects into the available amount of RAM by sharing common parts of state between multiple objects
+# Flyweight
 
-Similar to a database when you will create a new table 
-for example cars have unique atrivutes numebr plate and owner, but many share the same Brand color model etc 
+Reduces memory usage by sharing the common (intrinsic) state among many fine-grained objects.
+Each object stores only its unique (extrinsic) state and references shared state from a cache.
+
+## Participants
+- **Flyweight** — stores intrinsic (shared) state; receives extrinsic state via `operation()`
+- **FlyweightFactory** — cache that creates or returns existing flyweights by key
+- **SharedState** — data shared across many instances (e.g. car model, colour, brand)
+- **UniqueState** — data unique to each instance (e.g. owner, licence plate)
+
+## When to use
+- Large numbers of similar objects are consuming too much RAM
+- Most of the object state can be made extrinsic (passed in at call time)
+
+## Build
+```
+g++ -std=c++20 -Wall -Wextra -Wpedantic main.cpp -o flyweight
+```

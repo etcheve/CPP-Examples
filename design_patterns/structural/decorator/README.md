@@ -1,10 +1,22 @@
-This is a simple example,
-you can compile with g++ -std=c++20 $FileName
-and then run it with ./a.out
-Behaviour is standar and should work with any modern compiler  
+# Decorator
 
-for myself the main thing to rememeber is that here the object has a reference to an object of the interface type and when you do a with, you give the 
+Attaches additional behaviour to an object at runtime by wrapping it in decorator objects.
+Each decorator holds a reference to the wrapped object and delegates to it, then adds its own behaviour.
 
-I think the main practical difference with builder is that builder is one shot ( oideally ) you will build the object on the same place 
+## Participants
+- **Component** (`Car`) — interface shared by base objects and decorators
+- **Concrete component** (`Nissan`) — the base object being decorated
+- **Base decorator** (`CarDecorator`) — holds a `unique_ptr<Car>` and forwards calls
+- **Concrete decorators** (`AddSpoiler`, `AddWheels`, `AddPinkPaint`) — add behaviour before/after the delegate call
 
-for decorator may example is logger 
+## vs Builder
+Builder constructs an object in one shot at one place; Decorator wraps an already-constructed object
+and the wrapping can happen anywhere, in any order, at runtime.
+
+## Common use case
+Loggers: wrap a base service with a logging decorator without changing the service class.
+
+## Build
+```
+g++ -std=c++20 -Wall -Wextra -Wpedantic decorator.cpp -o decorator
+```

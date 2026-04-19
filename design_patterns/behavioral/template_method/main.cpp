@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 class AbstractClass {
     public: 
@@ -45,15 +46,13 @@ class ConcreteClass2 : public AbstractClass {
     }
 };
 
-int main(){
+int main() {
     std::cout << "Same client code can work with different subclasses:\n";
-    AbstractClass* class1 = new ConcreteClass1();
+    auto class1 = std::make_unique<ConcreteClass1>();
     class1->templateMethod();
-    delete class1;
 
-    AbstractClass* class2 = new ConcreteClass2();
+    auto class2 = std::make_unique<ConcreteClass2>();
     class2->templateMethod();
-    delete class2;
 
     return 0;
 }

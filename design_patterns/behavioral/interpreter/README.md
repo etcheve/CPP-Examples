@@ -1,4 +1,11 @@
-lets you define a language's grammar and provide an interpreter to process statements in that language. It is useful for parsing and executing expressions or commands in a system.
+## Interpreter
 
-facilitates the interpretation and evaluation of expressions or language grammars.
+Defines a grammar for a language and provides an interpreter to evaluate sentences in that language. Useful for expression parsers, rule engines, or query languages.
 
+**Roles:**
+- `Expression` — interface with a single `interpret()` method
+- `NumberExpression` — terminal expression (a literal value)
+- `AddExpression`, `MultiplicationExpression` — non-terminal expressions (composite nodes)
+- `Interpreter` — builds the expression tree and evaluates it
+
+The example hardcodes the tree for `2 + 3 * 4 = 14`.

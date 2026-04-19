@@ -7,7 +7,7 @@ class State {
         Context* context_;
 
     public:
-        ~State() = default;
+        virtual ~State() = default;
         void setContext(Context* context){
             context_ = context;
         }
@@ -18,13 +18,14 @@ class Context {
     private: 
         State* state_;
     public:
-        ~Context(){}
-        Context(State* state) : state_(nullptr){
+        ~Context() { delete state_; }
+        Context(State* state) : state_(nullptr) {
             transitionTo(state);
         }
 
-        void transitionTo(State* state){
+        void transitionTo(State* state) {
             std::cout << "Context: Transition to " << typeid(*state).name() << ".\n";
+            delete state_;
             state_ = state;
             state_->setContext(this);
         }

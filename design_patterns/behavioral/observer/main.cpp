@@ -29,13 +29,9 @@ class ConcreteSubject : public Subject {
             list_observer_.remove(observer);
         }
         void notify() override {
-            std::list<Observer*> b;
-            b = list_observer_;
-            std::list<Observer*>::iterator iterator = b.begin();
             howManyObservers();
-            while (iterator != b.end()) {
-                (*iterator)->update(message_);
-                ++iterator;
+            for (auto* observer : std::list<Observer*>(list_observer_)) {
+                observer->update(message_);
             }
         }
         void createMessage(std::string message = "Empty") {

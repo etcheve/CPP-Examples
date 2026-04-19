@@ -35,19 +35,15 @@ class AddExpression : public Expression {
 };
 class MultiplicationExpression : public Expression {
 private:
-    Expression* left;
-    Expression* right;
+    Expression* left_;
+    Expression* right_;
 
 public:
-    MultiplicationExpression(Expression* left, Expression* right) : left(left), right(right) {}
+    MultiplicationExpression(Expression* left, Expression* right) : left_(left), right_(right) {}
+    ~MultiplicationExpression() { delete left_; delete right_; }
 
     int interpret() const override {
-        return left->interpret() * right->interpret();
-    }
-
-    ~MultiplicationExpression() {
-        delete left;
-        delete right;
+        return left_->interpret() * right_->interpret();
     }
 };
 class Interpreter {

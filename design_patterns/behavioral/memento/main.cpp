@@ -1,4 +1,7 @@
 #include <iostream>
+#include <memory>
+#include <string>
+#include <vector>
 
 class Memento {
     public:

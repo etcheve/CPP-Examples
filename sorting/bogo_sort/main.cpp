@@ -4,8 +4,9 @@
 #include <random>
 
 void bogoSort(std::vector<int>& arr) {
-    // TODO: implement bogo sort
-    // Hint: shuffle arr randomly until std::is_sorted(arr.begin(), arr.end())
+    std::mt19937 rng(std::random_device{}());
+    while (!std::is_sorted(arr.begin(), arr.end()))
+        std::shuffle(arr.begin(), arr.end(), rng);
 }
 
 int main() {

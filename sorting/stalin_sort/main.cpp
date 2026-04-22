@@ -4,8 +4,11 @@
 // Stalin sort: any element that is out of order is purged from the array.
 // The result is sorted but may be missing elements.
 std::vector<int> stalinSort(const std::vector<int>& arr) {
-    // TODO: implement stalin sort
-    return {};
+    std::vector<int> result;
+    for (int x : arr)
+        if (result.empty() || x >= result.back())
+            result.push_back(x);
+    return result;
 }
 
 int main() {

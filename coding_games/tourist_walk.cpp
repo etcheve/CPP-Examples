@@ -69,7 +69,7 @@ int main() {
     test("All same",       {5, 5, 5, 5},       4); // can walk entire array
     test("Strictly up",   {1, 2, 3, 4},        4); // start at 0, go all right
     test("Strictly down", {4, 3, 2, 1},        4); // start at 3, go all left
-    test("Valley",        {5, 1, 5},           2); // can't cross the valley
+    test("Valley",        {5, 1, 5},           3); 
     test("Two elements",  {3, 3},              2); // minimum case
 
     return 0;

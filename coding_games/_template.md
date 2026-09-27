@@ -38,6 +38,8 @@ mp.erase("a");
 // st::vector
 #include <algorithm>
 
+        std::vector<std::vector<int>> poss(m+1, std::vector<int>(n+1, 0));
+
 std::sort(v.begin(), v.end()); // ascending
 std::sort(v.begin(), v.end(), std::greater<int>());
 
@@ -50,6 +52,20 @@ std::sort(v.begin(), v.end(),
     [](auto &a, auto &b) {
         return a.second < b.second;
     });
+
+
+stack<int> st;
+
+st.push(3);     // add to top
+st.pop();       // remove top (returns void!)
+st.top();       // peek at top without removing
+st.empty();     // true if empty
+st.size();      // number of elements
+
+#include <algorithm>   // min, max, swap, count, lower_bound, upper_bound, greater, less
+#include <cmath>       // abs (for floats)
+#include <cstdlib>     // abs (for ints)
+#include <numeric>     // accumulate
 
 std::min(a,b)
 std::max(a,b)
@@ -67,6 +83,17 @@ int INF = std::numeric_limits<int>::max();
 const int INF = 1e9;   // safer for addition 
 
 
+push — ordered containers where position matters
+cppstack.push(x)       // top
+queue.push(x)       // back
+vector.push_back(x) // back
+insert — containers that manage their own ordering
+cppset.insert(x)
+map.insert({key, val})
+unordered_set.insert(x)
+unordered_map.insert({key, val})
+
+
 | Problem type                     | Tool             |
 | -------------------------------- | ---------------- |
 | Shortest path unweighted         | BFS              |
@@ -75,3 +102,26 @@ const int INF = 1e9;   // safer for addition
 | All combinations                 | DFS/backtracking |
 | Repeated overlapping subproblems | DP               |
 | Local best choice works          | Greedy           |
+
+
+
+#include <iostream>
+#include <deque>
+
+int main() {
+    std::deque<int> dq;
+
+    dq.push_back(10);   // [10]
+    dq.push_back(20);   // [10, 20]
+    dq.push_front(5);   // [5, 10, 20]
+
+    std::cout << dq.front() << "\n"; // 5
+    std::cout << dq.back()  << "\n"; // 20
+    std::cout << dq[1]      << "\n"; // 10
+
+    dq.pop_front(); // [10, 20]
+    dq.pop_back();  // [10]
+
+    std::cout << dq.size()  << "\n"; // 1
+    std::cout << dq.empty() << "\n"; // 0 (false)
+}
